@@ -99,7 +99,8 @@ The previous steps make sure there exists `~/project/` folder.
 ```bash
 cd ~/project
 git clone https://github.com/zlab-purdue/upfuzz.git
-cd upfuzz
+
+cd ~/project/upfuzz
 ```
 
 Basic upfuzz: This section demonstrates how to start upgrade testing immediately using branch coverage mode.
@@ -110,6 +111,7 @@ Basic upfuzz: This section demonstrates how to start upgrade testing immediately
 * It starts up one fuzzing server and one fuzzing client (parallel num = 1)
 
 ```bash
+cd ~/project/upfuzz
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=3.11.17
 export UP_VERSION=4.1.4
@@ -170,6 +172,7 @@ bin/rm.sh
 ### Test HBase: 2.4.18 => 2.5.9
 
 ```bash
+cd ~/project/upfuzz
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=2.4.18
 export UP_VERSION=2.5.9
@@ -198,11 +201,13 @@ cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase_daemon3.py $UPFUZZ_DIR
 cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase_daemon3.py $UPFUZZ_DIR/prebuild/hbase/hbase-$UP_VERSION/bin/hbase_daemon.py
 
 
-cd $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/
-docker build . -t upfuzz_hdfs:hadoop-2.10.2
+docker pull hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
+docker tag hanke580/upfuzz-ae:hbase-2.4.18_2.5.9 \
+  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9
 
-cd $UPFUZZ_DIR/src/main/resources/hbase/compile-src/
-docker build . -t upfuzz_hbase:hbase-"$ORI_VERSION"_hbase-"$UP_VERSION"
+docker pull hanke580/upfuzz-ae:hdfs-2.10.2
+docker tag hanke580/upfuzz-ae:hdfs-2.10.2 \
+  upfuzz_hdfs:hadoop-2.10.2
 
 cd $UPFUZZ_DIR
 ./gradlew copyDependencies
@@ -229,6 +234,7 @@ same as Cassandra
 ### Test HDFS: 2.10.2 => 3.3.6
 
 ```bash
+cd ~/project/upfuzz
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=2.10.2
 export UP_VERSION=3.3.6
@@ -250,10 +256,11 @@ cd $UPFUZZ_DIR/prebuild/hdfs/hadoop-"$UP_VERSION"/
 /usr/lib/jvm/java-8-openjdk-amd64/bin/javac -d . -cp "share/hadoop/hdfs/*:share/hadoop/common/*:share/hadoop/common/lib/*" FsShellDaemon.java
 sed -i "s/  case \${subcmd} in/&\n    dfsdaemon)\n      HADOOP_CLASSNAME=\"org.apache.hadoop.fs.FsShellDaemon\"\n    ;;/" bin/hdfs
 
-cd $UPFUZZ_DIR/src/main/resources/hdfs/compile-src/
-sed -i "s/ORI_VERSION=hadoop-.*$/ORI_VERSION=hadoop-$ORI_VERSION/" hdfs-clusternode.sh
-sed -i "s/UPG_VERSION=hadoop-.*$/UPG_VERSION=hadoop-$UP_VERSION/" hdfs-clusternode.sh
-docker build . -t upfuzz_hdfs:hadoop-"$ORI_VERSION"_hadoop-"$UP_VERSION"
+# Pull the pre-built HDFS upgrade image
+docker pull hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
+# Create a local alias expected by UpFuzz scripts
+docker tag hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6 \
+  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6
 
 cd $UPFUZZ_DIR
 ./gradlew copyDependencies
