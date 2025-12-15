@@ -1,4 +1,5 @@
-FROM openjdk:8-jdk
+# FROM openjdk:8-jdk # Deprecated by docker
+FROM eclipse-temurin:8-jdk
 
 # 0. use tuna apt sources
 
