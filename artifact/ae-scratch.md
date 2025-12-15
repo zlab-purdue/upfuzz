@@ -1,7 +1,7 @@
 # Reproducing the Results from Scratch
 
 To streamline the artifact evaluation (AE) process, we provide pre-built instrumented binaries (Step 1) and pre-recorded bug-triggering traces, enabling a push-button evaluation workflow.  
-Reviewers may also reproduce all experiments entirely from scratch; however, this requires a substantial amount of computation time.
+Reviewers could also reproduce results entirely from scratch; however, this requires a substantial amount of computation time.
 
 All experiments were originally conducted in parallel using a large number of servers.
 
@@ -25,7 +25,7 @@ All experiments were originally conducted in parallel using a large number of se
 
 ### Reproducing Tables 2 and 3
 
-**Expected time:** approximately **450 machine-days** (270 + 180).
+**Expected time:** approximately **450 machine-days**.
 
 For each version pair, we configure UpFuzz to test under multiple settings and repeat each experiment three times.  
 Scripts are provided to automatically check whether a failure is successfully triggered.

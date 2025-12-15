@@ -4,8 +4,6 @@
 
 This repository contains the source code and artifact materials for **UpFuzz**, a framework for discovering data-format and upgrade bugs in distributed storage systems.
 
-
-
 ## Experiment data
 
 To evaluate UpFuzz, we conducted a large number of experiments, totaling > five months of a single machine time (We paralleled experiments with more servers). In accordance with the artifact evaluation (AE) guidelines, we do not expect reviewers to rerun all experiments from scratch to validate our results.
@@ -26,10 +24,14 @@ These artifacts enable result reproduction without re-running the full-scale exp
 
 We strongly encourage you to run experiments using cloudlab machines, specifically c220g5. All our experiments were conducted using cloudlab c220g5.
 
-Start up an instance for c220g5, run the following scripts to install all required dependencies.
+Start up an instance for `c220g5`, run the following scripts to install all required dependencies.
+
+
+(TODO: allow directly downloading this script)
+Create an script by `vim install.sh` and copy the following script into it.
+Then execute `bash install.sh`
 
 ```bash
-# Installation
 #!/bin/bash
 
 # sudo fdisk -l
@@ -59,9 +61,9 @@ echo "Y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="daveverwer"/' ~/.zshrc
 echo "exec zsh" >> ~/.bashrc
 
-git config --global user.name "Ke Han"
-git config --global user.email "kehan5800@gmail.com"
-git config --global core.editor "vim"
+# git config --global user.name "Ke Han"
+# git config --global user.email "kehan5800@gmail.com"
+# git config --global core.editor "vim"
 
 # docker
 sudo apt-get update
@@ -78,16 +80,11 @@ echo \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 
-# Sym link to change docker folder!
 sudo usermod -aG docker $USER
-# Mount docker image folder to another path (cloudlab only)
 sudo systemctl stop docker.service
 sudo systemctl stop docker.socket
 
-# If use mydata
-# sudo mv /var/lib/docker /mydata/
 sudo mv /var/lib/docker /mnt_ssd/
-# sudo ln -s /mydata/docker /var/lib/docker
 sudo ln -s /mnt_ssd/docker /var/lib/docker
 
 sudo systemctl daemon-reload   
@@ -97,9 +94,6 @@ sudo mkdir /mydata/test_binary
 sudo chown $USER /mydata/test_binary
 
 newgrp docker
-# ps aux | grep -i docker | grep -v grep
-# sudo systemctl status docker.service
-# sudo systemctl status docker.socket
 ```
 
 ## Kick-the-tires Instructions (~30 minutes)
@@ -240,7 +234,7 @@ bin/start_clients.sh 1 hdfs_config.json
 bin/hdfs_cl.sh
 ```
 
-## Full Evaluation Instructions (2 hours)
+## Full Evaluation Instructions (? hours)
 
 To facilitate a push-button artifact evaluation workflow, we provide pre-built instrumented binaries for all system versions evaluated in the paper. Using these binaries, reviewers do not need to re-run source code analysis or instrumentation.
 
@@ -264,6 +258,74 @@ Scripts are provided to generate the final figure.
 ### Reproduce Table 4: Overhead
 Scripts are provided to reproduce the overhead measurements reported in the paper.
 
-### Reproducing Bugs Directly with UpFuzz
+### Reproducing All Bugs Directly
 
-In this mode, UpFuzz runs directly using pre-generated command sequences to reproduce each bug individually.
+In this mode, UpFuzz runs directly using pre-generated command sequences to reproduce each bug individually. Reviews could simply run the reproducing mode and observe the triggering results.
+
+1. CASSANDRA-18105
+```bash
+xxx
+```
+
+2. CASSANDRA-18108
+```bash
+xxx
+```
+
+3. CASSANDRA-19590
+```bash
+xxx
+```
+4. CASSANDRA-19591
+```bash
+xxx
+```
+5. CASSANDRA-19623
+```bash
+xxx
+```
+6. CASSANDRA-19639
+```bash
+xxx
+```
+7. CASSANDRA-19689
+```bash
+xxx
+```
+
+8. CASSANDRA-20182
+```bash
+xxx
+```
+
+9. HBASE-28583
+```bash
+xxx
+```
+10. HBASE-28812
+```bash
+xxx
+```
+11. HBASE-28815
+```bash
+xxx
+```
+12. HBASE-19021
+```bash
+xxx
+```
+13. HDFS-16984
+```bash
+xxx
+```
+14.HDFS-17219
+```bash
+xxx
+```
+
+
+15.HDFS-17686
+
+```bash
+xxx
+```
