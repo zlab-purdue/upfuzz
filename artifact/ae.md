@@ -6,7 +6,7 @@ This repository contains the source code and artifact materials for **UpFuzz**, 
 
 ## Experiment data
 
-To evaluate UpFuzz, we conducted a large number of experiments, totaling > five months of a single machine time (We paralleled experiments with more servers). In accordance with the artifact evaluation (AE) guidelines, we do not expect reviewers to rerun all experiments from scratch to validate our results.
+To evaluate upfuzz, we conducted a large number of experiments, totaling > five months of a single machine time (We paralleled experiments with more servers). In accordance with the artifact evaluation (AE) guidelines, we do not expect reviewers to rerun all experiments from scratch to validate our results.
 
 Instead, we release our **raw experimental data**, allowing reviewers to download the data and run scripts to reproduce all figures and tables reported in the paper.
 
@@ -26,9 +26,8 @@ We strongly encourage you to run experiments using cloudlab machines, specifical
 
 Start up an instance for `c220g5`, run the following scripts to install all required dependencies.
 
-
 (TODO: allow directly downloading this script)
-Create an script by `vim install.sh` and copy the following script into it.
+Create a script by `vim install.sh` and copy the following script into it.
 Then execute `bash install.sh`
 
 ```bash
@@ -98,13 +97,20 @@ newgrp docker
 
 ## Kick-the-tires Instructions (~30 minutes)
 
+The previous steps make sure there exists `~/project/` folder.
+
+### Clone the repo
+```bash
+cd ~/project
+git clone https://github.com/zlab-purdue/upfuzz.git
+cd upfuzz
+```
+
 Basic upfuzz: This section demonstrates how to start upgrade testing immediately using branch coverage mode.
 
 #### Cassandra: 3.11.17 => 4.1.4
 
 ```bash
-git clone git@github.com:zlab-purdue/upfuzz.git
-cd upfuzz
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=3.11.17
 export UP_VERSION=4.1.4
@@ -128,21 +134,20 @@ cd ${UPFUZZ_DIR}
 ./gradlew copyDependencies
 ./gradlew :spotlessApply build
 
-# open terminal1: start server
-bin/start_server.sh config.json
-# open terminal2: start one client
-bin/start_clients.sh 1 config.json
+# Create session + Test run
+tmux new-session -d -s 0 \; split-window -v \;
+tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
+tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json > client.log' C-m
+```
 
-# stop testing
+Stop testing
+```bash
 bin/clean.sh
 ```
 
 #### HBase: 3.11.17 => 4.1.4
 
-
 ```bash
-git clone git@github.com:zlab-purdue/upfuzz.git
-cd upfuzz
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=2.4.18
 export UP_VERSION=2.5.9
@@ -181,20 +186,18 @@ cd $UPFUZZ_DIR
 ./gradlew copyDependencies
 ./gradlew :spotlessApply build
 
-# open terminal1: start server (this runs in foreground)
-bin/start_server.sh hbase_config.json
-# open terminal2: start one client (this runs in background)
-bin/start_clients.sh 1 hbase_config.json
-
-# stop testing
-bin/hbase_cl.sh
+# Create session + Test run
+tmux new-session -d -s 0 \; split-window -v \;
+tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hbase_config.json > server.log' C-m \;
+tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hbase_config.json > client.log' C-m
 ```
+
+stop testing
+bin/hbase_cl.sh
 
 #### HDFS: 3.11.17 => 4.1.4
 
 ```bash
-git clone git@github.com:zlab-purdue/upfuzz.git
-cd upfuzz
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=2.10.2
 export UP_VERSION=3.3.6
@@ -225,12 +228,14 @@ cd $UPFUZZ_DIR
 ./gradlew copyDependencies
 ./gradlew :spotlessApply build
 
-# open terminal1: start server
-bin/start_server.sh hdfs_config.json
-# open terminal2: start one client
-bin/start_clients.sh 1 hdfs_config.json
+# Create session + Test run
+tmux new-session -d -s 0 \; split-window -v \;
+tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hdfs_config.json > server.log' C-m \;
+tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hdfs_config.json > client.log' C-m
+```
 
-# stop testing
+stop testing
+```bash
 bin/hdfs_cl.sh
 ```
 
