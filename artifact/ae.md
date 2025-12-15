@@ -108,7 +108,10 @@ cd upfuzz
 
 Basic upfuzz: This section demonstrates how to start upgrade testing immediately using branch coverage mode.
 
-#### Cassandra: 3.11.17 => 4.1.4
+### Test Cassandra: 3.11.17 => 4.1.4
+
+**Start up testing process**
+* It starts up one fuzzing server and one fuzzing client (parallel num = 1)
 
 ```bash
 export UPFUZZ_DIR=$PWD
@@ -125,10 +128,10 @@ cd ${UPFUZZ_DIR}
 cp src/main/resources/cqlsh_daemon2.py prebuild/cassandra/apache-cassandra-"$ORI_VERSION"/bin/cqlsh_daemon.py
 cp src/main/resources/cqlsh_daemon4.py  prebuild/cassandra/apache-cassandra-"$UP_VERSION"/bin/cqlsh_daemon.py
 
-cd src/main/resources/cassandra/upgrade-testing/compile-src/
-sed -i "s/ORI_VERSION=apache-cassandra-.*$/ORI_VERSION=apache-cassandra-$ORI_VERSION/" cassandra-clusternode.sh
-sed -i "s/UP_VERSION=apache-cassandra-.*$/UP_VERSION=apache-cassandra-$UP_VERSION/" cassandra-clusternode.sh
-docker build . -t upfuzz_cassandra:apache-cassandra-"$ORI_VERSION"_apache-cassandra-"$UP_VERSION"
+docker pull hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4
+docker tag \
+  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
+  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
 
 cd ${UPFUZZ_DIR}
 ./gradlew copyDependencies
@@ -140,12 +143,35 @@ tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \
 tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json > client.log' C-m
 ```
 
-Stop testing
+**Check Testing Status**
+```bash
+cd ~/project/upfuzz
+# check logs
+
+# server logs: contain testing coverage, failure info
+vim server.log
+vim client.log
+
+# check containers
+docker ps
+
+# check failure
+ls failure/
+```
+
+**Stop Testing**
 ```bash
 bin/clean.sh
 ```
 
-#### HBase: 3.11.17 => 4.1.4
+**Remove Generated files**
+Long time fuzzing could generate lots of files (recorded tests, logs, failure reports...), which could take a large amount of the disk space. Usually after examining the bug reports, we use the following commands to remove useless files.
+```bash
+bin/rm.sh
+```
+
+
+### Test HBase: 2.4.18 => 2.5.9
 
 ```bash
 export UPFUZZ_DIR=$PWD
@@ -192,10 +218,19 @@ tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hbase_config.json > server.log'
 tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hbase_config.json > client.log' C-m
 ```
 
-stop testing
-bin/hbase_cl.sh
+**Check Testing Status**
 
-#### HDFS: 3.11.17 => 4.1.4
+same as Cassandra
+
+**Stop Testing**
+
+same as Cassandra
+
+**Remove Generated files**
+
+same as Cassandra
+
+### Test HDFS: 2.10.2 => 3.3.6
 
 ```bash
 export UPFUZZ_DIR=$PWD
@@ -234,16 +269,24 @@ tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hdfs_config.json > server.log' 
 tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hdfs_config.json > client.log' C-m
 ```
 
-stop testing
-```bash
-bin/hdfs_cl.sh
-```
+
+**Check Testing Status**
+
+same as Cassandra
+
+**Stop Testing**
+
+same as Cassandra
+
+**Remove Generated files**
+
+same as Cassandra
 
 ## Full Evaluation Instructions (? hours)
 
 To facilitate a push-button artifact evaluation workflow, we provide pre-built instrumented binaries for all system versions evaluated in the paper. Using these binaries, reviewers do not need to re-run source code analysis or instrumentation.
 
-We also provide scripts and traces to reproduce all reported results.
+We provide scripts and traces to reproduce all reported results.
 
 ### Reproduce Table 2: New Bugs Found by UpFuzz
 15 newly discovered data-format bugs.
