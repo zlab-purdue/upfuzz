@@ -25,6 +25,7 @@ testGraph.ser
 fullSequences/
 format_coverage.log
 server.log
+client.log
 
 ##############################
 ## python
