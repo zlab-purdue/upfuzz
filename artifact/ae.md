@@ -60,10 +60,6 @@ echo "Y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="daveverwer"/' ~/.zshrc
 echo "exec zsh" >> ~/.bashrc
 
-# git config --global user.name "Ke Han"
-# git config --global user.email "kehan5800@gmail.com"
-# git config --global core.editor "vim"
-
 # docker
 sudo apt-get update
 sudo apt-get install \
