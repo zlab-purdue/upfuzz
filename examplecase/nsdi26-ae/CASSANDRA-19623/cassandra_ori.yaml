@@ -586,7 +586,7 @@ tombstone_failure_threshold: 100000
 #   2) but, Cassandra will keep the collation index in memory for hot
 #      rows (as part of the key cache), so a larger granularity means
 #      you can cache more hot rows
-column_index_size_in_kb: 64
+column_index_size_in_kb: 1
 
 
 # Log WARN on any batch size exceeding this value. 5kb per batch by default.

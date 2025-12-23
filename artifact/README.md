@@ -333,132 +333,110 @@ Scripts are provided to reproduce the overhead measurements reported in the pape
 
 In this mode, UpFuzz runs directly using pre-generated command sequences to reproduce each bug individually. Reviews could simply run the reproducing mode and observe the triggering results.
 
+Each bug reproduction contains a separate script. As long as upfuzz repo is cloned, use the push-button script could reproduce the bug immediately.
+
 1. CASSANDRA-18105
 ```bash
 # 2.2.19 => 3.0.30
-
 cd ~/project/upfuzz
-
-# Clean everything
-bin/rm.sh; rm format_coverage.log
-rm ~/project/upfuzz/server.log
-
-# Prepare
-export UPFUZZ_DIR=$PWD
-export ORI_VERSION=2.2.19
-export UP_VERSION=3.0.30
-
-mkdir -p prebuild/cassandra
-cd prebuild/cassandra
-
-rm -rf apache-cassandra-$ORI_VERSION
-rm -rf apache-cassandra-$UP_VERSION
-
-wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz
-wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz
-
-cd ${UPFUZZ_DIR}
-cp src/main/resources/cqlsh_daemon2.py prebuild/cassandra/apache-cassandra-"$ORI_VERSION"/bin/cqlsh_daemon.py
-cp src/main/resources/cqlsh_daemon2.py  prebuild/cassandra/apache-cassandra-"$UP_VERSION"/bin/cqlsh_daemon.py
-
-docker pull hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
-docker tag \
-  hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30 \
-  upfuzz_cassandra:apache-cassandra-2.2.19_apache-cassandra-3.0.30
-
-cd ${UPFUZZ_DIR}
-./gradlew copyDependencies
-./gradlew :spotlessApply build
-
-cd ${UPFUZZ_DIR}
-cp  examplecase/nsdi26-ae/CASSANDRA-18105/config.json config.json
-cp examplecase/nsdi26-ae/CASSANDRA-18105/commands.txt examplecase/commands.txt
-cp examplecase/nsdi26-ae/CASSANDRA-18105/validcommands.txt examplecase/validcommands.txt
-
-# Reproduction run
-tmux new-session -d -s 0 \; split-window -v \;
-tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
-tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json' C-m
-
-# Clean after one test (< 2 minutes)
-sleep 120 && cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh --force; 
-
-# check failure reports
-bin/check_cass_18105.sh
-# You should expect to an inconsistency report: old version: 0 row, new version 1 row
+bash cass_repo_2_3.sh 18105 false
 ```
 
 2. CASSANDRA-18108
 ```bash
 # 4.1.6 => 5.0.2
+cd ~/project/upfuzz
+bash cass_repo_4_5.sh 18108 false
 ```
-
-TODO: push the image
-
 
 3. CASSANDRA-19590
 ```bash
 # 2.2.19 => 3.0.30
+cd ~/project/upfuzz
+bash cass_repo_2_3.sh 19590 false
 ```
+
 4. CASSANDRA-19591
 ```bash
-# 2.2.19 => 3.0.30
+cd ~/project/upfuzz
+bash cass_repo_2_3.sh 19639 false
 ```
+
+
 5. CASSANDRA-19623
 ```bash
-# 2.2.19 => 3.0.30
+cd ~/project/upfuzz
+bash cass_repo_2_3.sh 19623 true
 ```
+
 6. CASSANDRA-19639
 ```bash
-# 2.2.19 => 3.0.30
+cd ~/project/upfuzz
+bash cass_repo_2_3.sh 19639 true
 ```
+
 7. CASSANDRA-19689
 ```bash
-# 2.2.19 => 3.0.30
+cd ~/project/upfuzz
+bash cass_repo_2_3.sh 19689 false
 ```
 
 8. CASSANDRA-20182
 ```bash
-# 2.2.19 => 3.0.30
+cd ~/project/upfuzz
+bash cass_repo_2_3.sh 20182 true
 ```
 
 9. HBASE-28583
 ```bash
 # 2.5.9 => 3.0.0 (516c89e8597fb6)
+cd ~/project/upfuzz
+bash hbase_repo.sh 28583 false
 ```
 
 10. HBASE-28812
 ```bash
 # 2.6.0 => 3.0.0
+# similar procedural as the previous bugs
+cd ~/project/upfuzz
+bash hbase_repo.sh 28812 false
 ```
 
 11. HBASE-28815
 ```bash
 # 1.7.2 => 2.6.0
-
+# similar procedural as the previous bugs
+cd ~/project/upfuzz
+bash hbase_repo.sh 28815 false
 ```
+
 12. HBASE-29021
 ```bash
 # 2.5.9 => 3.0.0 (516c89e8597fb6)
+# similar procedural as the previous bugs
+cd ~/project/upfuzz
+bash hbase_repo.sh 29021 false
 ```
 
 13. HDFS-16984
 ```bash
 # 2.10.2 => 3.3.6
+cd ~/project/upfuzz
+bash hdfs_repo.sh 16984 false
 ```
 14.HDFS-17219
 ```bash
 # 2.10.2 => 3.3.6
-
+cd ~/project/upfuzz
+bash hdfs_repo.sh 17219 false
 ```
-
 
 15.HDFS-17686
-
 ```bash
 # 2.10.2 => 3.3.6
+cd ~/project/upfuzz
+bash hdfs_repo.sh 17686 false
 ```
-
 
 ## Misc
 ```bash
@@ -487,4 +465,8 @@ docker tag \
   hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
   upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
 
+gh release create cassandra-4.1.6 \
+  apache-cassandra-4.1.6-bin.tar.gz \
+  --title "Official Binary" \
+  --notes "Testing Purpose"
 ```
