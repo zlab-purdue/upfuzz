@@ -50,3 +50,37 @@ We configure UpFuzz to run in the state-exploration mode.
 ### Reproducing Table 4
 
 This experiment follows the same procedure described in `ae.md`.
+
+
+## Misc (Not )
+```bash
+# set remote url with ssh
+git remote set-url origin git@github.com:zlab-purdue/upfuzz.git
+
+# tag and push images to docker hub
+docker tag \
+  upfuzz_cassandra:apache-cassandra-2.2.19_apache-cassandra-3.0.30 \
+  hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
+docker push hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
+
+docker tag \
+  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9 \
+  hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
+docker push hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
+
+docker tag \
+  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6 \
+  hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
+docker push hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
+
+# pull images from docker hub
+docker pull hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4
+docker tag \
+  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
+  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
+
+gh release create cassandra-4.1.6 \
+  apache-cassandra-4.1.6-bin.tar.gz \
+  --title "Official Binary" \
+  --notes "Testing Purpose"
+```

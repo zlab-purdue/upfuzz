@@ -281,21 +281,11 @@ same as Cassandra
 
 same as Cassandra
 
-## Full Evaluation Instructions (? hours)
+## Full Evaluation Instructions
 
 To facilitate a push-button artifact evaluation workflow, we provide pre-built instrumented binaries for all system versions evaluated in the paper. Using these binaries, reviewers do not need to re-run source code analysis or instrumentation.
 
 We provide scripts and traces to reproduce all reported results.
-
-### Reproduce Table 2: New Bugs Found by UpFuzz
-15 newly discovered data-format bugs.
-
-Bug-triggering traces are provided for:
-* Baseline (BC) mode 
-* Final mode (BC + DF + VD)
-
-### Reproduce Table 3: Existing Bugs
-Scripts and traces are provided to reproduce previously known bugs under the same experimental setup.
 
 ### Reproduce Figure 14: State Exploration
 Run UpFuzz in state exploration mode.
@@ -313,10 +303,7 @@ python3 run.py
 ls -l all.pdf
 ```
 
-### Reproduce Table 4: Overhead
-Scripts are provided to reproduce the overhead measurements reported in the paper.
-
-### Reproducing All Bugs Directly
+### Reproduce Table 2: trigger newly detected bugs 
 
 In this mode, UpFuzz runs directly using pre-generated command sequences to reproduce each bug individually. Reviews could simply run the reproducing mode and observe the triggering results.
 
@@ -425,35 +412,15 @@ cd ~/project/upfuzz
 bash hdfs_repo.sh 17686 false
 ```
 
-## Misc
-```bash
-# set remote url with ssh
-git remote set-url origin git@github.com:zlab-purdue/upfuzz.git
+### Reproduce Table 2: triggering trace
 
-# tag and push images to docker hub
-docker tag \
-  upfuzz_cassandra:apache-cassandra-2.2.19_apache-cassandra-3.0.30 \
-  hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
-docker push hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
+We'll provide the detailed testing logs for the following 2 modes:
+* Baseline (BC) mode 
+* Final mode (BC + DF + VD)
 
-docker tag \
-  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9 \
-  hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
-docker push hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
+### Reproduce Table 4: Overhead
+Scripts are provided to reproduce the overhead measurements reported in the paper.
 
-docker tag \
-  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6 \
-  hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
-docker push hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
+* Download our prebuilt instrumented binaries, run upfuzz with a test with/without collecting data format feedback and then compute the overhead.
 
-# pull images from docker hub
-docker pull hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4
-docker tag \
-  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
-  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
-
-gh release create cassandra-4.1.6 \
-  apache-cassandra-4.1.6-bin.tar.gz \
-  --title "Official Binary" \
-  --notes "Testing Purpose"
-```
+We'll provide a push-button script to get this result directly.
