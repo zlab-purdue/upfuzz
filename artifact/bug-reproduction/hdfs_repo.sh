@@ -1,5 +1,5 @@
 
-cass_repo_func() {
+hdfs_repo_func() {
   # $1: BUG_ID
   # $2: SPECIAL_CONFIG (true/false)
 
@@ -57,3 +57,5 @@ cass_repo_func() {
   ls failure
   bin/check_${SYSTEM_SHORT}_${BUG_ID}.sh
 }
+
+hdfs_repo_func "$1" "$2"

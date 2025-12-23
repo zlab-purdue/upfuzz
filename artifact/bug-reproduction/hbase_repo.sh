@@ -73,3 +73,5 @@ hbase_repo_func() {
   ls failure
   bin/check_${SYSTEM_SHORT}_${BUG_ID}.sh
 }
+
+hbase_repo_func "$1" "$2"

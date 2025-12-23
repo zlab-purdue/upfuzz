@@ -62,3 +62,5 @@ cass_repo_func() {
   ls failure
   bin/check_${SYSTEM_SHORT}_${BUG_ID}.sh
 }
+
+cass_repo_func "$1" "$2"
