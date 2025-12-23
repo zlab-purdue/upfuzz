@@ -4,14 +4,13 @@
 
 This repository contains the source code and artifact materials for **UpFuzz**, a framework for discovering data-format and upgrade bugs in distributed storage systems.
 
+We provided our source code, the push-button script to run the testing framework and our experiment trace for evaluation. 
+
 ## Experiment data
 
 To evaluate upfuzz, we conducted a large number of experiments, totaling > five months of a single machine time (We paralleled experiments with more servers). In accordance with the artifact evaluation (AE) guidelines, we do not expect reviewers to rerun all experiments from scratch to validate our results.
 
 Instead, we release our **raw experimental data**, allowing reviewers to download the data and run scripts to reproduce all figures and tables reported in the paper.
-
-- The data is hosted on **Google Cloud Storage** (TODO: add link).
-- The dataset is publicly accessible to anyone with a Google account.
 
 For experiments that require substantial computational resources, we additionally provide:
 - Bug-triggering traces
@@ -325,6 +324,75 @@ In this mode, UpFuzz runs directly using pre-generated command sequences to repr
 ```bash
 # copy special cassandra config over
 # 2.2.19 => 3.0.30
+
+cd ~/project
+
+cd ~/project/upfuzz
+git checkout .
+git checkout dev
+git pull
+
+export UPFUZZ_DIR=$PWD
+export ORI_VERSION=2.2.19
+export UP_VERSION=3.0.30
+
+mkdir -p prebuild/cassandra
+cd prebuild/cassandra
+
+rm -rf apache-cassandra-$ORI_VERSION
+rm -rf apache-cassandra-$UP_VERSION
+
+wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz
+wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz
+
+
+cd ${UPFUZZ_DIR}
+cp src/main/resources/cqlsh_daemon2.py prebuild/cassandra/apache-cassandra-"$ORI_VERSION"/bin/cqlsh_daemon.py
+cp src/main/resources/cqlsh_daemon2.py  prebuild/cassandra/apache-cassandra-"$UP_VERSION"/bin/cqlsh_daemon.py
+
+cd src/main/resources/cassandra/upgrade-testing/compile-src/
+sed -i "s/ORI_VERSION=apache-cassandra-.*$/ORI_VERSION=apache-cassandra-$ORI_VERSION/" cassandra-clusternode.sh
+sed -i "s/UP_VERSION=apache-cassandra-.*$/UP_VERSION=apache-cassandra-$UP_VERSION/" cassandra-clusternode.sh
+
+# TODO: change this to pull image from docker hub
+docker build . -t upfuzz_cassandra:apache-cassandra-"$ORI_VERSION"_apache-cassandra-"$UP_VERSION"
+
+cd ${UPFUZZ_DIR}
+./gradlew copyDependencies
+./gradlew :spotlessApply build
+
+cd ${UPFUZZ_DIR}
+
+# testingMode = 3
+cp evaluation/CASSANDRA-2-3-config-net.json config.json
+
+# Clean
+cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh; bin/rm.sh; rm format_coverage.log 
+
+rm ~/project/upfuzz/server.log
+
+# =========
+
+# Reproduction run
+# copy upfuzz config (reproduction mode)
+# copy command sequence
+# (if needed): copy the config
+
+# =========
+
+# Large test
+tmux new-session -d -s 0 \; split-window -v \;
+tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
+tmux send-keys -t 0:0.1 C-m 'sleep 4; bin/start_clients.sh 30 config.json' C-m
+
+# =========
+
+# Test run
+tmux new-session -d -s 0 \; split-window -v \;
+tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
+tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json' C-m
+
+
 ```
 
 2. CASSANDRA-18108
@@ -400,4 +468,27 @@ In this mode, UpFuzz runs directly using pre-generated command sequences to repr
 ```bash
 # set remote url with ssh
 git remote set-url origin git@github.com:zlab-purdue/upfuzz.git
+
+# tag and push images to docker hub
+docker tag \
+  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
+  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
+docker push upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
+
+docker tag \
+  hanke580/upfuzz-ae:hbase-2.4.18_2.5.9 \
+  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9
+docker push upfuzz_hbase:hbase-2.4.18_hbase-2.5.9
+
+docker tag \
+  hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6 \
+  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6
+docker push upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6
+
+# pull images from docker hub
+docker pull hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4
+docker tag \
+  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
+  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
+
 ```
