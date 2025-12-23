@@ -11,17 +11,24 @@ All experiments were originally conducted in parallel using a large number of se
 
 ### 1.1 Source Code Analysis
 
-- Repository: `vasco`
+- Repository: `vasco`: https://github.com/zlab-purdue/vasco
+- Identify (1) which objects are serialized to disk and (2) where to monitor them 
 
 ### 1.2 Source Code Instrumentation
 
-- Repository: `dinv-runtime`
+- Repository: `dinv-monitor`: https://github.com/zlab-purdue/vasco
+- Instrument hooks to ssg-runtime (collect feedbacks) based on information from 1.1
+
+### 1.3 data format runtime collection (feedback)
+
+- Repository: `ssg-runtime`: https://github.com/zlab-purdue/ssg-runtime
+- Collect data format feedback during test execution and check whether the collected feedback is interesting.
 
 ---
 
 ## 2. Fuzz Testing
 
-- Repositories: `upfuzz`, `ssg-runtime`
+- Repositories: `upfuzz`
 
 ### Reproducing Tables 2 and 3
 
