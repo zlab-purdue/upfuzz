@@ -1,5 +1,18 @@
 # Source code repository for the upfuzz project
 
+## TODOs
+1. prepare reproduction scripts for all bugs
+* copy config (upfuzz): reproduction mode
+* copy system config
+* copy command sequence
+
+2. test push-button scripts
+
+3. reproduction from scratch: add more instructions
+
+4. prepare traces for bugs
+
+
 ## Overview
 
 This repository contains the source code and artifact materials for **UpFuzz**, a framework for discovering data-format and upgrade bugs in distributed storage systems.
