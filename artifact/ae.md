@@ -308,68 +308,75 @@ In this mode, UpFuzz runs directly using pre-generated command sequences to repr
 
 1. CASSANDRA-18105
 ```bash
-xxx
+# copy special cassandra config over
+# 2.2.19 => 3.0.30
+
 ```
 
 2. CASSANDRA-18108
 ```bash
-xxx
+# 4.1.6 => 5.0.2
 ```
 
 3. CASSANDRA-19590
 ```bash
-xxx
+# 2.2.19 => 3.0.30
 ```
 4. CASSANDRA-19591
 ```bash
-xxx
+# 2.2.19 => 3.0.30
 ```
 5. CASSANDRA-19623
 ```bash
-xxx
+# 2.2.19 => 3.0.30
 ```
 6. CASSANDRA-19639
 ```bash
-xxx
+# 2.2.19 => 3.0.30
 ```
 7. CASSANDRA-19689
 ```bash
-xxx
+# 2.2.19 => 3.0.30
 ```
 
 8. CASSANDRA-20182
 ```bash
-xxx
+# 2.2.19 => 3.0.30
 ```
 
 9. HBASE-28583
 ```bash
-xxx
+# 2.5.9 => 3.0.0 (516c89e8597fb6)
 ```
+
 10. HBASE-28812
 ```bash
-xxx
+# 2.6.0 => 3.0.0
 ```
+
 11. HBASE-28815
 ```bash
-xxx
+# 1.7.2 => 2.6.0
+
 ```
-12. HBASE-19021
+12. HBASE-29021
 ```bash
-xxx
+# 2.5.9 => 3.0.0 (516c89e8597fb6)
 ```
+
 13. HDFS-16984
 ```bash
-xxx
+# 2.10.2 => 3.3.6
 ```
 14.HDFS-17219
 ```bash
-xxx
+# 2.10.2 => 3.3.6
+
 ```
 
 
 15.HDFS-17686
 
 ```bash
-xxx
+# 2.10.2 => 3.3.6
 ```
