@@ -335,16 +335,15 @@ In this mode, UpFuzz runs directly using pre-generated command sequences to repr
 
 1. CASSANDRA-18105
 ```bash
-# copy special cassandra config over
 # 2.2.19 => 3.0.30
 
-cd ~/project
-
 cd ~/project/upfuzz
-git checkout .
-git checkout dev
-git pull
 
+# Clean everything
+bin/rm.sh; rm format_coverage.log
+rm ~/project/upfuzz/server.log
+
+# Prepare
 export UPFUZZ_DIR=$PWD
 export ORI_VERSION=2.2.19
 export UP_VERSION=3.0.30
@@ -358,60 +357,44 @@ rm -rf apache-cassandra-$UP_VERSION
 wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz
 wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz
 
-
 cd ${UPFUZZ_DIR}
 cp src/main/resources/cqlsh_daemon2.py prebuild/cassandra/apache-cassandra-"$ORI_VERSION"/bin/cqlsh_daemon.py
 cp src/main/resources/cqlsh_daemon2.py  prebuild/cassandra/apache-cassandra-"$UP_VERSION"/bin/cqlsh_daemon.py
 
-cd src/main/resources/cassandra/upgrade-testing/compile-src/
-sed -i "s/ORI_VERSION=apache-cassandra-.*$/ORI_VERSION=apache-cassandra-$ORI_VERSION/" cassandra-clusternode.sh
-sed -i "s/UP_VERSION=apache-cassandra-.*$/UP_VERSION=apache-cassandra-$UP_VERSION/" cassandra-clusternode.sh
-
-# TODO: change this to pull image from docker hub
-docker build . -t upfuzz_cassandra:apache-cassandra-"$ORI_VERSION"_apache-cassandra-"$UP_VERSION"
+docker pull hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
+docker tag \
+  hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30 \
+  upfuzz_cassandra:apache-cassandra-2.2.19_apache-cassandra-3.0.30
 
 cd ${UPFUZZ_DIR}
 ./gradlew copyDependencies
 ./gradlew :spotlessApply build
 
 cd ${UPFUZZ_DIR}
-
-# testingMode = 3
-cp evaluation/CASSANDRA-2-3-config-net.json config.json
-
-# Clean
-cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh; bin/rm.sh; rm format_coverage.log 
-
-rm ~/project/upfuzz/server.log
-
-# =========
+cp  examplecase/nsdi26-ae/CASSANDRA-18105/config.json config.json
+cp examplecase/nsdi26-ae/CASSANDRA-18105/commands.txt examplecase/commands.txt
+cp examplecase/nsdi26-ae/CASSANDRA-18105/validcommands.txt examplecase/validcommands.txt
 
 # Reproduction run
-# copy upfuzz config (reproduction mode)
-# copy command sequence
-# (if needed): copy the config
-
-# =========
-
-# Large test
-tmux new-session -d -s 0 \; split-window -v \;
-tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
-tmux send-keys -t 0:0.1 C-m 'sleep 4; bin/start_clients.sh 30 config.json' C-m
-
-# =========
-
-# Test run
 tmux new-session -d -s 0 \; split-window -v \;
 tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
 tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json' C-m
 
+# Clean after one test (< 2 minutes)
+sleep 120 && cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh --force; 
 
+# check failure reports
+bin/check_cass_18105.sh
+# You should expect to an inconsistency report: old version: 0 row, new version 1 row
 ```
 
 2. CASSANDRA-18108
 ```bash
 # 4.1.6 => 5.0.2
 ```
+
+TODO: push the image
+
 
 3. CASSANDRA-19590
 ```bash
@@ -484,19 +467,19 @@ git remote set-url origin git@github.com:zlab-purdue/upfuzz.git
 
 # tag and push images to docker hub
 docker tag \
-  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
-  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
-docker push upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
+  upfuzz_cassandra:apache-cassandra-2.2.19_apache-cassandra-3.0.30 \
+  hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
+docker push hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
 
 docker tag \
-  hanke580/upfuzz-ae:hbase-2.4.18_2.5.9 \
-  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9
-docker push upfuzz_hbase:hbase-2.4.18_hbase-2.5.9
+  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9 \
+  hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
+docker push hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
 
 docker tag \
-  hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6 \
-  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6
-docker push upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6
+  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6 \
+  hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
+docker push hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
 
 # pull images from docker hub
 docker pull hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4

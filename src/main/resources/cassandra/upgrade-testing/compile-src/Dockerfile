@@ -42,7 +42,11 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY cqlsh_init.sh /cassandra/cqlsh_init.sh
 
-RUN pip3 install cassandra-driver
+# RUN pip3 install cassandra-driver
+
+RUN pip3 install --only-binary=:all: cassandra-driver
+
+
 # This file contains relatively permanent configurations.
 # ADD cass-setup.sh /usr/local/bin/cass-setup.sh
 # RUN sh /usr/local/bin/cass-setup.sh
