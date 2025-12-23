@@ -189,18 +189,18 @@ def find_smallest_index_exceeding_threshold(queue, threshold):
 
 def get_margin(system):
     y_margin = 0
-    if (system == "Cassandra"):
+    if (system == "cassandra"):
         y_margin = 25 
-    elif (system == "HBase"):
+    elif (system == "hbase"):
         y_margin = 80
-    elif (system == "HDFS"):
+    elif (system == "hdfs"):
         y_margin = 20
     if onlyCountMultiVD:
-        if (system == "Cassandra"):
+        if (system == "cassandra"):
             y_margin = 3
-        elif (system == "HBase"):
+        elif (system == "hbase"):
             y_margin = 1
-        elif (system == "HDFS"):
+        elif (system == "hdfs"):
             y_margin = 1
     return y_margin
 
@@ -279,10 +279,12 @@ def run():
 
     fig, axs = plt.subplots(1, 3, figsize=(18, 8))  # Adjust figsize as needed
 
-    systems = ["Cassandra", "HDFS", "HBase"]
+    systems = ["cassandra", "hdfs", "hbase"]
     for i in range(3):
         system = systems[i]
         dir = system
+        # if (system == "hdfs"):
+        #      dir = "hdfs-eval1-without-decl"
         times_avg_fc, FCqueue_avg_fc, VDqueue_avg_fc = compute_avg(dir, "fc")
         times_avg_bc, FCqueue_avg_bc, VDqueue_avg_bc = compute_avg(dir, "bc")
         times_avg_vd, FCqueue_avg_vd, VDqueue_avg_vd = compute_avg(dir, "vd")

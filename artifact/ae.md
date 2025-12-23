@@ -55,6 +55,13 @@ sudo chown $USER ~/project/
 sudo apt-get update
 sudo apt-get install openjdk-11-jdk openjdk-8-jdk python2 maven fzf ant htop tmux -y -f
 
+# trace figure
+sudo apt install -y python3-pip
+python3 -m pip install --user numpy matplotlib scipy
+pip3 install --user gdown
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
 # Set up zsh
 echo "Y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="daveverwer"/' ~/.zshrc
@@ -299,6 +306,17 @@ Run UpFuzz in state exploration mode.
 
 Scripts are provided to generate the final figure.
 
+```bash
+cd ~/project/upfuzz
+cd artifact/state-exploration
+wget https://github.com/zlab-purdue/upfuzz/releases/download/v1.0-data/state-exploration-data.tar.gz
+tar -xzvf state-exploration-data.tar.gz
+python3 run.py
+
+# all.pdf will be generated at path artifact/state-exploration/all.pdf
+ls -l all.pdf
+```
+
 ### Reproduce Table 4: Overhead
 Scripts are provided to reproduce the overhead measurements reported in the paper.
 
@@ -310,7 +328,6 @@ In this mode, UpFuzz runs directly using pre-generated command sequences to repr
 ```bash
 # copy special cassandra config over
 # 2.2.19 => 3.0.30
-
 ```
 
 2. CASSANDRA-18108
@@ -379,4 +396,11 @@ In this mode, UpFuzz runs directly using pre-generated command sequences to repr
 
 ```bash
 # 2.10.2 => 3.3.6
+```
+
+
+## Misc
+```bash
+# set remote url with ssh
+git remote set-url origin git@github.com:zlab-purdue/upfuzz.git
 ```

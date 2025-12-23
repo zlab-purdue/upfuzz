@@ -118,3 +118,13 @@ nb-configuration.xml
 
 *~
 bin/main/
+
+
+artifact/state-exploration/cassandra/
+artifact/state-exploration/hbase/
+artifact/state-exploration/hdfs/
+artifact/state-exploration/state-exploration-data.tar.gz
+artifact/state-exploration/all.pdf
+._cassandra
+._hbase
+._hdfs
