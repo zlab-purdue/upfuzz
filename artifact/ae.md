@@ -58,9 +58,6 @@ sudo apt-get install openjdk-11-jdk openjdk-8-jdk python2 maven fzf ant htop tmu
 # trace figure
 sudo apt install -y python3-pip
 python3 -m pip install --user numpy matplotlib scipy
-pip3 install --user gdown
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
 
 # Set up zsh
 echo "Y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
