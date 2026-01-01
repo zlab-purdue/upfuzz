@@ -21,7 +21,7 @@ These artifacts enable result reproduction without re-running the full-scale exp
 ---
 ## Requirements
 
-We strongly encourage you to run experiments using cloudlab machines, specifically c220g5. All our experiments were conducted using cloudlab c220g5.
+We strongly encourage you to run experiments using cloudlab machines, specifically `c220g5`. All our experiments were conducted using cloudlab `c220g5`.
 
 Start up an instance for `c220g5`, run the following scripts to install all required dependencies.
 
