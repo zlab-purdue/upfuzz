@@ -16,7 +16,7 @@ hbase_repo_func() {
   cd $UPFUZZ_DIR/prebuild/hadoop
 
   if [ ! -d "hadoop-2.10.2" ]; then
-    wget https://archive.apache.org/dist/hadoop/common/hadoop-2.10.2/hadoop-2.10.2.tar.gz > /dev/null
+    wget https://archive.apache.org/dist/hadoop/common/hadoop-2.10.2/hadoop-2.10.2.tar.gz > /dev/null 2>&1
     tar -xzvf hadoop-2.10.2.tar.gz > /dev/null
     cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/core-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
     cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hdfs-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
@@ -28,11 +28,11 @@ hbase_repo_func() {
   cd $UPFUZZ_DIR/prebuild/hbase
 
   if [ ! -d "hbase-$ORI_VERSION" ]; then
-    wget https://archive.apache.org/dist/hbase/"$ORI_VERSION"/hbase-"$ORI_VERSION"-bin.tar.gz > /dev/null
+    wget https://archive.apache.org/dist/hbase/"$ORI_VERSION"/hbase-"$ORI_VERSION"-bin.tar.gz > /dev/null 2>&1
     tar -xzvf hbase-"$ORI_VERSION"-bin.tar.gz > /dev/null
   fi
   if [ ! -d "hbase-$UP_VERSION" ]; then
-    wget https://github.com/zlab-purdue/upfuzz/releases/download/hbase-3.0.0/hbase-3.0.0-516c89e8597fb6-bin.tar.gz > /dev/null
+    wget https://github.com/zlab-purdue/upfuzz/releases/download/hbase-3.0.0/hbase-3.0.0-516c89e8597fb6-bin.tar.gz > /dev/null 2>&1
     tar -xzvf hbase-3.0.0-516c89e8597fb6-bin.tar.gz > /dev/null
   fi
 
