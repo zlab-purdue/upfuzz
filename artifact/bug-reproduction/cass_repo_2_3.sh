@@ -78,6 +78,9 @@ cass_repo_func() {
 
   # check failure reports
   ls failure
+  echo
+  echo
+
   bin/check_${SYSTEM_SHORT}_${BUG_ID}.sh
 }
 
