@@ -248,101 +248,101 @@ Each bug reproduction contains a separate script. As long as upfuzz repo is clon
 1. CASSANDRA-18105
 ```bash
 # 2.2.19 => 3.0.30
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_2_3.sh 18105 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 18105 false
 ```
 
 2. CASSANDRA-18108
 ```bash
 # 4.1.6 => 5.0.2
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_4_5.sh 18108 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_4_5.sh 18108 false
 ```
 
 3. CASSANDRA-19590
 ```bash
 # 2.2.19 => 3.0.30
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_2_3.sh 19590 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 19590 false
 ```
 
 4. CASSANDRA-19591
 ```bash
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_2_3.sh 19639 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 19639 false
 ```
 
 
 5. CASSANDRA-19623
 ```bash
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_2_3.sh 19623 true
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 19623 true
 ```
 
 6. CASSANDRA-19639
 ```bash
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_2_3.sh 19639 true
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 19639 true
 ```
 
 7. CASSANDRA-19689
 ```bash
-cd ~/project/upfuzz/artifact/bug-reproduction/
-bash cass_repo_2_3.sh 19689 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 19689 false
 ```
 
 8. CASSANDRA-20182
 ```bash
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash cass_repo_2_3.sh 20182 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/cass_repo_2_3.sh 20182 false
 ```
 
 9. HBASE-28583
 ```bash
 # 2.5.9 => 3.0.0 (516c89e8597fb6)
-cd ~/project/upfuzz/
+cd ~/project/upfuzz
 bash artifact/bug-reproduction/hbase_repo.sh 28583 false
 ```
 
 10. HBASE-28812 (TODO: add config)
 ```bash
 # 2.6.0 => 3.0.0 (a030e8099840e640684a68b6e4a79e7c1d5a6823)
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash hbase_repo.sh 28812 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/hbase_repo.sh 28812 false
 ```
 
 11. HBASE-28815 (TODO: add config)
 ```bash
 # 1.7.2 => 2.6.0
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash hbase_repo.sh 28815 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/hbase_repo.sh 28815 false
 ```
 
 12. HBASE-29021
 ```bash
 # 2.5.9 => 3.0.0 (516c89e8597fb6)
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash hbase_repo.sh 29021 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/hbase_repo.sh 29021 false
 ```
 
 13. HDFS-16984
 ```bash
 # 2.10.2 => 3.3.6
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash hdfs_repo.sh 16984 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/hdfs_repo.sh 16984 false
 ```
 14.HDFS-17219
 ```bash
 # 2.10.2 => 3.3.6
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash hdfs_repo.sh 17219 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/hdfs_repo.sh 17219 false
 ```
 
 15.HDFS-17686
 ```bash
 # 2.10.2 => 3.3.6
-cd ~/project/upfuzz/artifact/bug-reproduction
-bash hdfs_repo.sh 17686 false
+cd ~/project/upfuzz
+bash artifact/bug-reproduction/hdfs_repo.sh 17686 false
 ```
 
 ### Reproduce Table 2: triggering trace
