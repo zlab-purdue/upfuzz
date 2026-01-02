@@ -63,10 +63,17 @@ docker tag \
   hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
 docker push hanke580/upfuzz-ae:cassandra-2.2.19_3.0.30
 
+# HBase
 docker tag \
   upfuzz_hbase:hbase-2.4.18_hbase-2.5.9 \
   hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
 docker push hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
+
+docker tag \
+  upfuzz_hbase:hbase-2.5.9_hbase-3.0.0 \
+  hanke580/upfuzz-ae:hbase-2.5.9_3.0.0
+docker push hanke580/upfuzz-ae:hbase-2.5.9_3.0.0
+
 
 docker tag \
   upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6 \

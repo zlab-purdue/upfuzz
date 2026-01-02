@@ -13,6 +13,15 @@ hbase_repo_func() {
 
   cd $UPFUZZ_DIR
 
+  mkdir -p $UPFUZZ_DIR/prebuild/hadoop
+  cd $UPFUZZ_DIR/prebuild/hadoop
+  sudo rm -rf hadoop-2.10.2
+  HDFS_BIN_PATH=/proj/sosp21-upgrade-PG0/upfuzz_files/binary/hdfs/
+  tar -xzvf $HDFS_BIN_PATH/hadoop-2.10.2.tar.gz
+  cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/core-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
+  cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hdfs-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
+  cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hadoop-env.sh $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
+
   mkdir -p prebuild/hbase
   cd prebuild/hbase
 
