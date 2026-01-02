@@ -12,18 +12,20 @@ hbase_repo_func() {
   local UP_VERSION=3.0.0
 
   cd $UPFUZZ_DIR
-
   mkdir -p $UPFUZZ_DIR/prebuild/hadoop
   cd $UPFUZZ_DIR/prebuild/hadoop
-  sudo rm -rf hadoop-2.10.2
-  HDFS_BIN_PATH=/proj/sosp21-upgrade-PG0/upfuzz_files/binary/hdfs/
-  tar -xzvf $HDFS_BIN_PATH/hadoop-2.10.2.tar.gz
-  cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/core-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
-  cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hdfs-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
-  cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hadoop-env.sh $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
 
-  mkdir -p prebuild/hbase
-  cd prebuild/hbase
+  if [ ! -d "hadoop-2.10.2" ]; then
+    wget https://archive.apache.org/dist/hadoop/common/hadoop-2.10.2/hadoop-2.10.2.tar.gz
+    tar -xzvf hadoop-2.10.2.tar.gz
+    cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/core-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
+    cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hdfs-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
+    cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hadoop-env.sh $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
+  fi
+
+  cd $UPFUZZ_DIR
+  mkdir -p $UPFUZZ_DIR/prebuild/hbase
+  cd $UPFUZZ_DIR/prebuild/hbase
 
   if [ ! -d "hbase-$ORI_VERSION" ]; then
     wget https://archive.apache.org/dist/hbase/"$ORI_VERSION"/hbase-"$ORI_VERSION"-bin.tar.gz
@@ -71,6 +73,7 @@ hbase_repo_func() {
   fi
 
   # Reproduction run
+  tmux kill-session -t 0
   tmux new-session -d -s 0 \; split-window -v \;
   tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hbase_config.json > server.log' C-m \;
   tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hbase_config.json' C-m

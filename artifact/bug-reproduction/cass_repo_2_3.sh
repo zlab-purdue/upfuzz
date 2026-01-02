@@ -51,6 +51,7 @@ cass_repo_func() {
   fi
 
   # Reproduction run
+  tmux kill-session -t 0
   tmux new-session -d -s 0 \; split-window -v \;
   tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
   tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json' C-m
