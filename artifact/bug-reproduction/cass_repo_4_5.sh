@@ -17,12 +17,12 @@ cass_repo_func() {
   cd prebuild/cassandra
 
   if [ ! -d "apache-cassandra-$ORI_VERSION" ]; then
-    wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz
-    tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz
+    wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz > /dev/null
+    tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz > /dev/null
   fi
   if [ ! -d "apache-cassandra-$UP_VERSION" ]; then
-    wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz
-    tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz
+    wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz > /dev/null
+    tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz > /dev/null
   fi
 
   cd ${UPFUZZ_DIR}
@@ -35,8 +35,8 @@ cass_repo_func() {
     upfuzz_cassandra:apache-cassandra-${ORI_VERSION}_apache-cassandra-${UP_VERSION}
 
   cd ${UPFUZZ_DIR}
-  ./gradlew copyDependencies
-  ./gradlew :spotlessApply build
+  ./gradlew copyDependencies > /dev/null
+  ./gradlew :spotlessApply build > /dev/null
 
   # copy config and triggering commands
   cd ${UPFUZZ_DIR}
@@ -57,10 +57,29 @@ cass_repo_func() {
   tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json' C-m
 
   # Clean after one test (< 2 minutes)
-  sleep 120 && cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh --force;
+  echo "Waiting for test completion (2 minutes)..."
+  total=120
+  for ((i=1; i<=total; i++)); do
+    percent=$((i * 100 / total))
+    bar_length=50
+    filled_length=$((percent * bar_length / 100))
+    
+    # Create progress bar
+    bar=""
+    for ((j=0; j<filled_length; j++)); do bar+="█"; done
+    for ((j=filled_length; j<bar_length; j++)); do bar+="░"; done
+    
+    remaining=$((total - i))
+    printf "\r[%s] %d%% - %02d:%02d remaining" "$bar" "$percent" $((remaining/60)) $((remaining%60))
+    sleep 1
+  done
+  echo -e "\nTest completed, starting cleanup..."
+  cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh --force;
 
   # check failure reports
   ls failure
+  echo "--------------------------------"
+  echo
   bin/check_${SYSTEM_SHORT}_${BUG_ID}.sh
 }
 

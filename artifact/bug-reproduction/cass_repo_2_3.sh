@@ -17,11 +17,11 @@ cass_repo_func() {
   cd prebuild/cassandra
 
   if [ ! -d "apache-cassandra-$ORI_VERSION" ]; then
-    wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz
+    wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz > /dev/null
     tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz > /dev/null
   fi
   if [ ! -d "apache-cassandra-$UP_VERSION" ]; then
-    wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz
+    wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz > /dev/null
     tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz > /dev/null
   fi
 
@@ -78,9 +78,8 @@ cass_repo_func() {
 
   # check failure reports
   ls failure
+  echo "--------------------------------"
   echo
-  echo
-
   bin/check_${SYSTEM_SHORT}_${BUG_ID}.sh
 }
 
