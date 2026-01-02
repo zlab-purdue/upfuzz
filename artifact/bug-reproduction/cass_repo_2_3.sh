@@ -18,11 +18,11 @@ cass_repo_func() {
 
   if [ ! -d "apache-cassandra-$ORI_VERSION" ]; then
     wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz
-    tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz
+    tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz > /dev/null
   fi
   if [ ! -d "apache-cassandra-$UP_VERSION" ]; then
     wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz
-    tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz
+    tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz > /dev/null
   fi
 
   cd ${UPFUZZ_DIR}
@@ -35,8 +35,8 @@ cass_repo_func() {
     upfuzz_cassandra:apache-cassandra-${ORI_VERSION}_apache-cassandra-${UP_VERSION}
 
   cd ${UPFUZZ_DIR}
-  ./gradlew copyDependencies
-  ./gradlew :spotlessApply build
+  ./gradlew copyDependencies > /dev/null
+  ./gradlew :spotlessApply build > /dev/null
 
   # copy config and triggering commands
   cd ${UPFUZZ_DIR}
