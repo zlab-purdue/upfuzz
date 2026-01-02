@@ -21,8 +21,8 @@ hbase_repo_func() {
     tar -xzvf hbase-"$ORI_VERSION"-bin.tar.gz
   fi
   if [ ! -d "hbase-$UP_VERSION" ]; then
-    wget https://archive.apache.org/dist/hbase/"$UP_VERSION"/hbase-"$UP_VERSION"-bin.tar.gz
-    tar -xzvf hbase-"$UP_VERSION"-bin.tar.gz
+    wget https://github.com/zlab-purdue/upfuzz/releases/download/hbase-3.0.0/hbase-3.0.0-516c89e8597fb6-bin.tar.gz
+    tar -xzvf hbase-3.0.0-516c89e8597fb6-bin.tar.gz
   fi
 
   cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase-env.sh $UPFUZZ_DIR/prebuild/hbase/hbase-$ORI_VERSION/conf/ -f
