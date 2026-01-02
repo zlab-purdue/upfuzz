@@ -63,8 +63,8 @@ hbase_repo_func() {
 
   # Reproduction run
   tmux new-session -d -s 0 \; split-window -v \;
-  tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
-  tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json' C-m
+  tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hbase_config.json > server.log' C-m \;
+  tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hbase_config.json' C-m
 
   # Clean after one test (< 2 minutes)
   sleep 120 && cd ~/project/upfuzz; sudo chmod 777 /var/run/docker.sock; bin/clean.sh --force;
