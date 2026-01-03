@@ -34,6 +34,8 @@ bash setup-upfuzz-env.sh
 
 The previous steps make sure there exists `~/project/` folder.
 
+This section demonstrates how to start upgrade testing immediately for Cassandra, HBase and HDFS.
+
 ### Clone the repo
 ```bash
 cd ~/project
@@ -42,8 +44,6 @@ git clone https://github.com/zlab-purdue/upfuzz.git
 cd ~/project/upfuzz
 ```
 
-Basic upfuzz: This section demonstrates how to start upgrade testing immediately using branch coverage mode.
-
 ### Test Cassandra: 3.11.17 => 4.1.4
 
 **Start up testing process**
@@ -51,33 +51,7 @@ Basic upfuzz: This section demonstrates how to start upgrade testing immediately
 
 ```bash
 cd ~/project/upfuzz
-export UPFUZZ_DIR=$PWD
-export ORI_VERSION=3.11.17
-export UP_VERSION=4.1.4
-
-mkdir -p "$UPFUZZ_DIR"/prebuild/cassandra
-cd prebuild/cassandra
-wget https://archive.apache.org/dist/cassandra/"$ORI_VERSION"/apache-cassandra-"$ORI_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$ORI_VERSION"-bin.tar.gz
-wget https://archive.apache.org/dist/cassandra/"$UP_VERSION"/apache-cassandra-"$UP_VERSION"-bin.tar.gz ; tar -xzvf apache-cassandra-"$UP_VERSION"-bin.tar.gz
-sed -i 's/num_tokens: 16/num_tokens: 256/' apache-cassandra-"$UP_VERSION"/conf/cassandra.yaml
-
-cd ${UPFUZZ_DIR}
-cp src/main/resources/cqlsh_daemon2.py prebuild/cassandra/apache-cassandra-"$ORI_VERSION"/bin/cqlsh_daemon.py
-cp src/main/resources/cqlsh_daemon4.py  prebuild/cassandra/apache-cassandra-"$UP_VERSION"/bin/cqlsh_daemon.py
-
-docker pull hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4
-docker tag \
-  hanke580/upfuzz-ae:cassandra-3.11.17_4.1.4 \
-  upfuzz_cassandra:apache-cassandra-3.11.17_apache-cassandra-4.1.4
-
-cd ${UPFUZZ_DIR}
-./gradlew copyDependencies
-./gradlew :spotlessApply build
-
-# Create session + Test run
-tmux new-session -d -s 0 \; split-window -v \;
-tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh config.json > server.log' C-m \;
-tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 config.json > client.log' C-m
+bash artifact/test-cass.sh
 ```
 
 **Check Testing Status**
@@ -112,44 +86,7 @@ bin/rm.sh
 
 ```bash
 cd ~/project/upfuzz
-export UPFUZZ_DIR=$PWD
-export ORI_VERSION=2.4.18
-export UP_VERSION=2.5.9
-
-mkdir -p $UPFUZZ_DIR/prebuild/hadoop
-cd $UPFUZZ_DIR/prebuild/hadoop
-wget https://archive.apache.org/dist/hadoop/common/hadoop-2.10.2/hadoop-2.10.2.tar.gz ; tar -xzvf hadoop-2.10.2.tar.gz
-cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/core-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
-cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hdfs-site.xml $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
-cp $UPFUZZ_DIR/src/main/resources/hdfs/hbase-pure/hadoop-env.sh $UPFUZZ_DIR/prebuild/hadoop/hadoop-2.10.2/etc/hadoop/ -f
-
-mkdir -p $UPFUZZ_DIR/prebuild/hbase
-cd $UPFUZZ_DIR/prebuild/hbase
-wget https://archive.apache.org/dist/hbase/"$ORI_VERSION"/hbase-"$ORI_VERSION"-bin.tar.gz -O hbase-"$ORI_VERSION".tar.gz ; tar -xzvf hbase-"$ORI_VERSION".tar.gz
-wget https://archive.apache.org/dist/hbase/"$UP_VERSION"/hbase-"$UP_VERSION"-bin.tar.gz -O hbase-"$UP_VERSION".tar.gz ; tar -xzvf hbase-"$UP_VERSION".tar.gz
-cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase-env.sh $UPFUZZ_DIR/prebuild/hbase/hbase-$ORI_VERSION/conf/ -f
-cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase-env.sh $UPFUZZ_DIR/prebuild/hbase/hbase-$UP_VERSION/conf/ -f
-
-cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase_daemon3.py $UPFUZZ_DIR/prebuild/hbase/hbase-$ORI_VERSION/bin/hbase_daemon.py
-cp $UPFUZZ_DIR/src/main/resources/hbase/compile-src/hbase_daemon3.py $UPFUZZ_DIR/prebuild/hbase/hbase-$UP_VERSION/bin/hbase_daemon.py
-
-
-docker pull hanke580/upfuzz-ae:hbase-2.4.18_2.5.9
-docker tag hanke580/upfuzz-ae:hbase-2.4.18_2.5.9 \
-  upfuzz_hbase:hbase-2.4.18_hbase-2.5.9
-
-docker pull hanke580/upfuzz-ae:hdfs-2.10.2
-docker tag hanke580/upfuzz-ae:hdfs-2.10.2 \
-  upfuzz_hdfs:hadoop-2.10.2
-
-cd $UPFUZZ_DIR
-./gradlew copyDependencies
-./gradlew :spotlessApply build
-
-# Create session + Test run
-tmux new-session -d -s 0 \; split-window -v \;
-tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hbase_config.json > server.log' C-m \;
-tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hbase_config.json > client.log' C-m
+bash artifact/test-hbase.sh
 ```
 
 **Check Testing Status**
@@ -168,41 +105,7 @@ same as Cassandra
 
 ```bash
 cd ~/project/upfuzz
-export UPFUZZ_DIR=$PWD
-export ORI_VERSION=2.10.2
-export UP_VERSION=3.3.6
-
-mkdir -p $UPFUZZ_DIR/prebuild/hdfs
-cd $UPFUZZ_DIR/prebuild/hdfs
-wget https://archive.apache.org/dist/hadoop/common/hadoop-"$ORI_VERSION"/hadoop-"$ORI_VERSION".tar.gz ; tar -xzvf hadoop-$ORI_VERSION.tar.gz
-wget https://archive.apache.org/dist/hadoop/common/hadoop-"$UP_VERSION"/hadoop-"$UP_VERSION".tar.gz ; tar -xzvf hadoop-"$UP_VERSION".tar.gz
-
-# old version hdfs daemon
-cp $UPFUZZ_DIR/src/main/resources/FsShellDaemon2.java $UPFUZZ_DIR/prebuild/hdfs/hadoop-"$ORI_VERSION"/FsShellDaemon.java
-cd $UPFUZZ_DIR/prebuild/hdfs/hadoop-"$ORI_VERSION"/
-/usr/lib/jvm/java-8-openjdk-amd64/bin/javac -d . -cp "share/hadoop/hdfs/*:share/hadoop/common/*:share/hadoop/common/lib/*" FsShellDaemon.java
-sed -i "s/elif \[ \"\$COMMAND\" = \"dfs\" \] ; then/elif [ \"\$COMMAND\" = \"dfsdaemon\" ] ; then\n  CLASS=org.apache.hadoop.fs.FsShellDaemon\n  HADOOP_OPTS=\"\$HADOOP_OPTS \$HADOOP_CLIENT_OPTS\"\n&/" bin/hdfs
-
-# new version hdfs daemon
-cp $UPFUZZ_DIR/src/main/resources/FsShellDaemon_trunk.java $UPFUZZ_DIR/prebuild/hdfs/hadoop-"$UP_VERSION"/FsShellDaemon.java
-cd $UPFUZZ_DIR/prebuild/hdfs/hadoop-"$UP_VERSION"/
-/usr/lib/jvm/java-8-openjdk-amd64/bin/javac -d . -cp "share/hadoop/hdfs/*:share/hadoop/common/*:share/hadoop/common/lib/*" FsShellDaemon.java
-sed -i "s/  case \${subcmd} in/&\n    dfsdaemon)\n      HADOOP_CLASSNAME=\"org.apache.hadoop.fs.FsShellDaemon\"\n    ;;/" bin/hdfs
-
-# Pull the pre-built HDFS upgrade image
-docker pull hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6
-# Create a local alias expected by UpFuzz scripts
-docker tag hanke580/upfuzz-ae:hdfs-2.10.2_3.3.6 \
-  upfuzz_hdfs:hadoop-2.10.2_hadoop-3.3.6
-
-cd $UPFUZZ_DIR
-./gradlew copyDependencies
-./gradlew :spotlessApply build
-
-# Create session + Test run
-tmux new-session -d -s 0 \; split-window -v \;
-tmux send-keys -t 0:0.0 C-m 'bin/start_server.sh hdfs_config.json > server.log' C-m \;
-tmux send-keys -t 0:0.1 C-m 'sleep 2; bin/start_clients.sh 1 hdfs_config.json > client.log' C-m
+bash artifact/test-hdfs.sh
 ```
 
 **Check Testing Status**
@@ -243,16 +146,21 @@ ls -l all.pdf
 
 In this mode, UpFuzz runs directly using pre-generated command sequences to reproduce each bug individually. Reviews could simply run the reproducing mode and observe the triggering results.
 
-Each bug reproduction contains a separate script. As long as upfuzz repo is cloned, use the push-button script could reproduce the bug immediately.
+Each bug reproduction contains a reproduction script. As long as upfuzz repo is cloned, use the push-button script could reproduce the bug immediately (each bug takes < 5 minutes). The bug reports is under `upfuzz/failure` folder.
 
-1. CASSANDRA-18105
+```bash
+upfuzz (main*) $ ls failure 
+failure_0
+```
+
+1. CASSANDRA-18105 (Tested)
 ```bash
 # 2.2.19 => 3.0.30
 cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 18105 false
 ```
 
-2. CASSANDRA-18108
+2. CASSANDRA-18108 (Testing)
 ```bash
 # 4.1.6 => 5.0.2
 cd ~/project/upfuzz
