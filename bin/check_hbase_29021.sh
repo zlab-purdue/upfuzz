@@ -1,0 +1,1 @@
+f=$(find failure -iname "inconsistency_*" | sort -t '_' -k2,2n | head -n1) && [[ -n $f ]] && bin/print_time.sh "$(cut -d'/' -f1-2 <<<"$f")" || echo "bug is not triggered yet"

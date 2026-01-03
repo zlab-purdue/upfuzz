@@ -272,7 +272,6 @@ cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 19639 false
 ```
 
-
 5. CASSANDRA-19623
 ```bash
 cd ~/project/upfuzz
