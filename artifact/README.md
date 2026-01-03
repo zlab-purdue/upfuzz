@@ -12,9 +12,9 @@ To evaluate upfuzz, we conducted a large number of experiments, totaling > five 
 
 Instead, we release our **raw experimental data**, allowing reviewers to download the data and run scripts to reproduce all figures and tables reported in the paper.
 
-For experiments that require substantial computational resources, we additionally provide:
-- Bug-triggering traces
-- Execution logs
+For experiments that require substantial computational resources, we provide:
+- Pre-built instrumented binaries
+- Experiment traces
 
 These artifacts enable result reproduction without re-running the full-scale experiments.
 
