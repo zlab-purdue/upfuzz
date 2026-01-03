@@ -65,7 +65,7 @@ cass_repo_func() {
 
   # Clean after one test (< 2 minutes)
   echo "Waiting for test completion (2 minutes)..."
-  total=120
+  total=240
   for ((i=1; i<=total; i++)); do
     percent=$((i * 100 / total))
     bar_length=50

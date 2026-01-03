@@ -2,4 +2,4 @@ CREATE KEYSPACE IF NOT EXISTS ks WITH REPLICATION = { 'class' : 'SimpleStrategy'
 CREATE TABLE IF NOT EXISTS ks.tb (id INT, value INT, PRIMARY KEY (id));
 DELETE value FROM ks.tb WHERE id = 3;
 ALTER TABLE ks.tb DROP value ;
-ALTER TABLE ks.tb ADD value TEXT ; 
+ALTER TABLE ks.tb ADD value TEXT ;
