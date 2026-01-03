@@ -160,14 +160,14 @@ cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 18105 false
 ```
 
-2. CASSANDRA-18108 (Testing)
+2. CASSANDRA-18108 (Buggy scripts)
 ```bash
 # 4.1.6 => 5.0.2
 cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_4_5.sh 18108 false
 ```
 
-3. CASSANDRA-19590
+3. CASSANDRA-19590 (Tested)
 ```bash
 # 2.2.19 => 3.0.30
 cd ~/project/upfuzz
@@ -186,7 +186,7 @@ cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 19623 true
 ```
 
-6. CASSANDRA-19639
+6. CASSANDRA-19639 (Buggy scripts)
 ```bash
 cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 19639 true
@@ -204,7 +204,7 @@ cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 20182 false
 ```
 
-9. HBASE-28583
+9. HBASE-28583 (Tested)
 ```bash
 # 2.5.9 => 3.0.0 (516c89e8597fb6)
 cd ~/project/upfuzz
