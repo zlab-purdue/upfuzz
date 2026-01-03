@@ -16,7 +16,7 @@ All experiments were originally conducted in parallel using a large number of se
 
 ### 1.2 Source Code Instrumentation
 
-- Repository: `dinv-monitor`: https://github.com/zlab-purdue/vasco
+- Repository: `dinv-monitor`: https://github.com/zlab-purdue/dinv-monitor
 - Instrument hooks to ssg-runtime (collect feedbacks) based on information from 1.1
 
 ### 1.3 data format runtime collection (feedback)
@@ -52,7 +52,7 @@ We configure UpFuzz to run in the state-exploration mode.
 This experiment follows the same procedure described in `ae.md`.
 
 
-## Misc (Not )
+## Misc (Not for reviewers)
 ```bash
 # set remote url with ssh
 git remote set-url origin git@github.com:zlab-purdue/upfuzz.git
