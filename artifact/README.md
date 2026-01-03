@@ -63,7 +63,7 @@ cd ~/project/upfuzz
 vim server.log
 vim client.log
 
-# check containers
+# check containers: you would see 1 container running
 docker ps
 
 # check failure
@@ -177,7 +177,7 @@ bash artifact/bug-reproduction/cass_repo_2_3.sh 19590 false
 4. CASSANDRA-19591
 ```bash
 cd ~/project/upfuzz
-bash artifact/bug-reproduction/cass_repo_2_3.sh 19639 false
+bash artifact/bug-reproduction/cass_repo_2_3.sh 19591 true
 ```
 
 5. CASSANDRA-19623
