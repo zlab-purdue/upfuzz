@@ -8,6 +8,11 @@ hbase_repo_func() {
   local SYSTEM_SHORT="hbase"
   local UPFUZZ_DIR=~/project/upfuzz
 
+  if [ ! -d "$UPFUZZ_DIR" ]; then
+    echo "Directory $UPFUZZ_DIR does not exist! Please check your setup and make sure you have cloned the upfuzz repository and put it under ~/project/upfuzz."
+    exit 1
+  fi
+
   local ORI_VERSION=2.5.9
   local UP_VERSION=3.0.0
 

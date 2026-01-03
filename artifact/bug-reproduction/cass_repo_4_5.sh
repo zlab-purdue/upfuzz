@@ -8,6 +8,11 @@ cass_repo_func() {
   local SYSTEM_SHORT="cass"
   local UPFUZZ_DIR=~/project/upfuzz
 
+  if [ ! -d "$UPFUZZ_DIR" ]; then
+    echo "Directory $UPFUZZ_DIR does not exist! Please check your setup and make sure you have cloned the upfuzz repository and put it under ~/project/upfuzz."
+    exit 1
+  fi
+
   local ORI_VERSION=4.1.6
   local UP_VERSION=5.0.2
 
