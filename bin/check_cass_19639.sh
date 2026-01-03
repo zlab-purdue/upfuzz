@@ -1,5 +1,5 @@
 #!/bin/bash
-f=$(grep -A1 -r 'java.lang.RuntimeException: java.lang.NullPointerException' failure | grep 'org.apache.cassandra.service.StorageProxy$DroppableRunnable.run' | sort -t '_' -k2,2n | head -n1)
+f=$(grep -r 'java.lang.RuntimeException: java.lang.NullPointerException' failure | sort -t '_' -k2,2n | head -n1)
 
 # Add color to the output for better visibility
 GREEN='\033[0;32m'
