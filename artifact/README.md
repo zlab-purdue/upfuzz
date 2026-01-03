@@ -60,13 +60,13 @@ cd ~/project/upfuzz
 # check logs
 
 # server logs: contain testing coverage, failure info
-vim server.log
-vim client.log
+view server.log
+view client.log
 
 # check containers: you would see 1 container running
 docker ps
 
-# check failure
+# check failure (if any bug is detected)
 ls failure/
 ```
 
@@ -160,7 +160,7 @@ cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 18105 false
 ```
 
-2. CASSANDRA-18108 (Buggy scripts)
+2. CASSANDRA-18108 (Tested)
 ```bash
 # 4.1.6 => 5.0.2
 cd ~/project/upfuzz
@@ -186,7 +186,7 @@ cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 19623 true
 ```
 
-6. CASSANDRA-19639 (Buggy scripts)
+6. CASSANDRA-19639 (Tested)
 ```bash
 cd ~/project/upfuzz
 bash artifact/bug-reproduction/cass_repo_2_3.sh 19639 true

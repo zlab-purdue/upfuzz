@@ -7,7 +7,7 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m'   # no color
 
-if [[ -n "$f" && -f "$f" ]]; then
+if [[ -n "$f" ]]; then
   echo -e "${GREEN}[OK]${NC}   bug is triggered"
   echo -e "${YELLOW}[FILE]${NC} $f"
   echo "--------------------"
